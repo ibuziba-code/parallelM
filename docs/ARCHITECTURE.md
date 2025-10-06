@@ -110,22 +110,44 @@ If you'd rather view a diagram immediately without installing Graphviz, there's 
 You can view it directly in `docs/architecture.mmd` or embed it into Markdown. Here's the Mermaid source (also in `docs/architecture.mmd`):
 
 ```mermaid
-flowchart LR
-  subgraph Monorepo[Monorepo (pnpm workspace)]
+flowchart TB
+  classDef pkg fill:#f8f9fa,stroke:#dfe6ee,stroke-width:1px
+  classDef sdk fill:#fff0f6,stroke:#ffd6e0
+  classDef browser fill:#e6f7ff,stroke:#a9d8ff
+  classDef tools fill:#fff7e6,stroke:#ffe7b5
+
+  subgraph Monorepo[Monorepo with pnpm workspace]
     direction TB
-    vanilla["packages/vanilla\nloadParallel(config)"]
-    react["packages/react\nParallelProvider, useParallel, PassportButton"]
-    examples["examples/* (react-webpack, webpack)"]
+    vanilla[packages/vanilla<br/>loadParallel function<br/>- injects script tag<br/>- awaits window.Parallel]:::pkg
+    react[packages/react<br/>ParallelProvider<br/>useParallel hook<br/>PassportButton]:::pkg
+    examples[examples<br/>react-webpack<br/>webpack]:::pkg
   end
 
-  Browser["Browser App\nimports @parallelmarkets/vanilla (or @parallelmarkets/react)\ncalls loadParallel(config)"]
-  Remote["Remote Parallel SDK\nhttps://app.parallelmarkets.com/sdk/v2/parallel.js\nexposes window.Parallel"]
+  Browser[Browser Application<br/>imports SDK packages<br/>calls loadParallel]:::browser
+
+  Remote[Remote Parallel SDK<br/>app.parallelmarkets.com<br/>SDK v2<br/>- window.Parallel<br/>- auth.statusChange]:::sdk
+
+  Tools[Build Tooling<br/>Rollup<br/>TypeScript<br/>Jest<br/>ESLint]:::tools
 
   Browser -->|imports| vanilla
   Browser -->|optional imports| react
   react -->|depends on| vanilla
-  vanilla -->|inserts <script> and awaits load| Remote
-  Remote -->|initialized API -> window.Parallel| Browser
+  vanilla -->|loads script| Remote
+  Remote -->|provides API| Browser
+  Browser -->|API calls| Remote
+  Tools --> vanilla
+  Tools --> react
+
+  subgraph Errors[Failure Modes]
+    direction LR
+    loadErr[Remote SDK load error<br/>loadParallel rejects]:::sdk
+    ssr[Server-side SSR<br/>loadParallel returns null]:::pkg
+    multiCall[Multiple calls<br/>Promise rejects]
+  end
+
+  Remote -.->|on error| loadErr
+  Browser -.->|on server| ssr
+  Browser -.->|if called multiple times| multiCall
 ```
 
 This gives a quick visual without external tooling. If you'd like, I can also generate an SVG using a Node-based renderer and commit it to the repo.
