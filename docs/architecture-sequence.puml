@@ -1,0 +1,23 @@
+@startuml
+clparticipant Browser as "Browser App"
+participant Vanilla as "@parallelmarkets/vanilla"
+participant Remote as "Remote Parallel SDK"
+participant React as "@parallelmarkets/react"
+
+User -> Browser: Clicks login button
+Browser -> Vanilla: call loadParallel(config)
+activate Vanilla
+Vanilla -> Remote: inject <script> (async)
+Remote -> Vanilla: script loaded -> sets window.Parallel
+Vanilla -> Remote: Parallel.init({... on_init ...})
+Remote -> Vanilla: on_init callback
+deactivate Vanilla
+
+Browser -> React: ParallelProvider wraps Promise
+React -> Vanilla: access Promise -> await Parallel
+activate Remote
+Remote -> Browser: emits auth.statusChange
+Browser -> Remote: login()
+Remote -> Browser: redirect/overlay/iframe flows
+Remote -> Browser: getProfile -> returns user profile
+@enduml

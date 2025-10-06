@@ -1,0 +1,39 @@
+flowchart LR
+  classDef pkg fill:#f8f9fa,stroke:#dfe6ee,stroke-width:1px
+  classDef sdk fill:#fff0f6,stroke:#ffd6e0
+  classDef browser fill:#e6f7ff,stroke:#a9d8ff
+  classDef tools fill:#fff7e6,stroke:#ffe7b5
+
+  subgraph Monorepo[Monorepo (pnpm workspace)]
+    direction TB
+    vanilla["packages/vanilla\nloadParallel(config)\n- injects <script>\n- awaits window.Parallel"]:::pkg
+    react["packages/react\nParallelProvider, useParallel, PassportButton"]:::pkg
+    examples["examples/*\n(react-webpack, webpack)"]:::pkg
+  end
+
+  Browser["Browser App\nimports @parallelmarkets/vanilla (or @parallelmarkets/react)\ncalls loadParallel(config)"]:::browser
+
+  Remote["Remote Parallel SDK\nhttps://app.parallelmarkets.com/sdk/v2/parallel.js\n- exposes window.Parallel\n- Parallel.init(config)\n- emits auth.statusChange"]:::sdk
+
+  Tools["Build & Tooling\nRollup, TypeScript, Jest, ESLint"]:::tools
+
+  Browser -->|imports| vanilla
+  Browser -->|optional imports| react
+  react -->|depends on| vanilla
+  vanilla -->|inserts <script> and awaits load| Remote
+  Remote -->|initialized API -> window.Parallel| Browser
+  Browser -->|network SDK/API calls| Remote
+  Tools --> vanilla
+  Tools --> react
+
+  %% Error/failure notes
+  subgraph Errors[Failure modes]
+    direction LR
+    loadErr(["Remote SDK load error\n-> loadParallel rejects"]):::sdk
+    ssr(["Server-side (SSR)\n-> loadParallel resolves null"]):::pkg
+    multiCall(["Multiple calls to loadParallel\n-> rejects"])
+  end
+
+  Remote -->|load error| loadErr
+  Browser -->|server| ssr
+  Browser -->|multiple calls| multiCall

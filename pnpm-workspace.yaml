@@ -1,0 +1,5 @@
+packages:
+  - 'packages/vanilla'
+  - 'packages/react'
+  - 'examples/react-webpack'
+  - 'examples/webpack'

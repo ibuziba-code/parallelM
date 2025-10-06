@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src" /* Specify the root folder within your source files. */,
+    "outDir": "./dist" /* Specify an output folder for all emitted files. */,
+    "lib": ["ES5", "DOM"],
+    "target": "ES5",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "noEmit": true // Type check only. Rollup runs Babel to compile for lower targets in the next step
+  }
+}

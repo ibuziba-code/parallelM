@@ -1,0 +1,47 @@
+digraph ParallelJS {
+  rankdir=LR;
+  node [shape=box, style=filled, fillcolor="#f8f9fa", fontname="Helvetica"];
+
+  subgraph cluster_monorepo {
+    label = "Monorepo (pnpm workspace)";
+    style = rounded;
+    color = "#dfe6ee";
+
+    vanilla [label="packages/vanilla\n(loadParallel)\n- adds <script>\n- resolves Promise with window.Parallel"];
+    react [label="packages/react\n(ParallelProvider, useParallel, PassportButton)\n- wraps vanilla promise\n- subscribes to auth events"];
+    examples [label="examples/ (react-webpack, webpack)\n- usage demos"];
+  }
+
+  subgraph cluster_build {
+    label = "Build & Tooling";
+    node [shape=note, fillcolor="#fff7e6"];
+    rollup [label="Rollup builds (ESM/CJS)"];
+    types [label="TypeScript types (d.ts)\n- tsc --noEmit"];
+    tests [label="Jest tests"];
+  }
+
+  browser [label="Browser App (consumer)\n- may import @parallelmarkets/react or @parallelmarkets/vanilla\n- calls loadParallel(config)", shape=component, fillcolor="#e6f7ff"];
+
+  remote_sdk [label="Remote Parallel SDK\nhttps://app.parallelmarkets.com/sdk/v2/parallel.js\n- exposes window.Parallel\n- Parallel.init(config, on_init)\n- emits auth.statusChange", shape=folder, fillcolor="#fff0f6"];
+
+  browser -> vanilla [label="imports"];
+  browser -> react [label="imports (optional)"];
+  react -> vanilla [label="depends on"];
+  vanilla -> remote_sdk [label="inserts <script> and awaits load\n(script src -> window.Parallel)"];
+  remote_sdk -> browser [label="window.Parallel (initialized) -> SDK API"];
+  react -> browser [label="ParallelProvider wraps app with promise"];
+  browser -> remote_sdk [label="network (SDK fetch + API calls)"];
+
+  rollup -> vanilla [style=dashed];
+  rollup -> react [style=dashed];
+  types -> vanilla [style=dashed];
+  tests -> vanilla [style=dashed];
+
+  // Notes
+  env [label="ENV: PACKAGE_NAME/PACKAGE_VERSION\nappended to Parallel load context", shape=note, fillcolor="#f0fff4"];
+  vanilla -> env [style=dotted];
+  react -> env [style=dotted];
+
+  // Error/failure edges
+  remote_sdk -> vanilla [label="load error -> reject promise", color=red, fontcolor=red];
+}

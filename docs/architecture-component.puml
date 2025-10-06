@@ -1,0 +1,37 @@
+@startuml
+' Component diagram for parallel-js
+skinparam componentStyle rectangle
+
+package "Monorepo (pnpm workspace)" {
+  [packages/vanilla] as Vanilla
+  [packages/react] as ReactPkg
+  [examples/*] as Examples
+}
+
+component "Browser App (consumer)" as Browser
+node "Remote Parallel SDK\nhttps://app.parallelmarkets.com/sdk/v2/parallel.js" as RemoteSDK
+database "Build & Tooling\n(Rollup, TypeScript, Jest, ESLint)" as Tools
+
+Vanilla --> RemoteSDK : inject <script> & await load
+Browser --> Vanilla : import / call loadParallel(config)
+Browser --> ReactPkg : import (optional)
+ReactPkg --> Vanilla : depends on / wraps Promise
+RemoteSDK --> Browser : exposes window.Parallel
+Tools --> Vanilla : builds / types
+Tools --> ReactPkg : builds / types
+Examples --> Vanilla : demo usage
+
+note left of Vanilla
+  contract:
+  loadParallel(config)
+  -> Promise<Parallel | null>
+end note
+
+note right of RemoteSDK
+  runtime:
+  - Parallel.init(..., on_init)
+  - emits auth.statusChange
+  - login / logout / getProfile
+end note
+
+@enduml

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" preserveAspectRatio="xMidYMid meet" role="img" aria-label="parallel-js architecture diagram">
+  <defs>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="8" stdDeviation="18" flood-color="#0b1220" flood-opacity="0.06" />
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb" />
+    </marker>
+    <style>
+      :root{--bg:#f6fbff;--panel:#ffffff;--muted:#56616a;--accent:#2563eb;--accent-2:#0ea5a0}
+      svg{font-family: Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif}
+      .title{font-weight:700;font-size:20px;fill:#0b1220}
+      .subtitle{font-weight:600;font-size:13px;fill:var(--muted)}
+      .node-title{font-weight:700;font-size:13px;fill:#0b1220}
+      .node-sub{font-size:12px;fill:var(--muted)}
+      .panel{fill:var(--panel);stroke:#e6f0fb;stroke-width:1;border-radius:10px;filter:url(#shadow)}
+      .package{fill:#fbfdff;stroke:#e6f6ff}
+      .sdk{fill:#fff9fb;stroke:#ffeef3}
+      .tools{fill:#fffdf8;stroke:#fff2d9}
+      .connector{fill:none;stroke:var(--accent);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow)}
+      .muted{fill:var(--muted)}
+      .legend{font-size:12px;fill:var(--muted)}
+      a{cursor:pointer}
+    </style>
+  </defs>
+
+  <!-- Background title -->
+  <text x="36" y="38" class="title">parallel-js</text>
+  <text x="36" y="58" class="subtitle">Client SDK loader & React integration — architecture overview</text>
+
+  <!-- Monorepo container -->
+  <g id="monorepo" transform="translate(36,88)">
+    <rect x="0" y="0" width="420" height="320" rx="12" class="panel" />
+    <text x="20" y="28" class="node-title">Monorepo (pnpm workspace)</text>
+
+    <g id="vanilla" transform="translate(16,48)" data-title="packages/vanilla: loadParallel(config) — injects a single script, awaits window.Parallel, calls Parallel.init(...)">
+      <rect x="0" y="0" width="388" height="72" rx="8" class="package" />
+      <text x="14" y="26" class="node-title">packages/vanilla</text>
+      <text x="14" y="46" class="node-sub">loadParallel(config) — injects &amp; awaits SDK</text>
+    </g>
+
+    <g id="reactpkg" transform="translate(16,140)" data-title="packages/react: ParallelProvider, useParallel(), PassportButton — wraps vanilla promise and subscribes to auth events">
+      <rect x="0" y="0" width="388" height="72" rx="8" class="package" />
+      <text x="14" y="26" class="node-title">packages/react</text>
+      <text x="14" y="46" class="node-sub">ParallelProvider, useParallel, PassportButton</text>
+    </g>
+
+    <g id="examples" transform="translate(16,232)" data-title="examples: webpack/demo projects showing integration">
+      <rect x="0" y="0" width="388" height="48" rx="8" class="package" />
+      <text x="14" y="30" class="node-sub">examples/* (react-webpack, webpack)</text>
+    </g>
+  </g>
+
+  <!-- Browser App -->
+  <g id="browser" transform="translate(490,112)" data-title="Browser app: imports loader or react package; calls loadParallel(config) to get Promise&lt;Parallel&gt;">
+    <rect x="0" y="0" width="420" height="160" rx="12" class="panel" />
+    <text x="18" y="28" class="node-title">Browser App (consumer)</text>
+    <text x="18" y="50" class="node-sub">imports @parallelmarkets/vanilla or @parallelmarkets/react</text>
+    <text x="18" y="68" class="node-sub">calls loadParallel(config) → Promise&lt;Parallel&gt;</text>
+    <rect x="18" y="86" width="130" height="28" rx="8" fill="#ffffff" stroke="#eef6ff" />
+    <text x="26" y="104" class="node-sub">ParallelProvider</text>
+  </g>
+
+  <!-- Remote SDK -->
+  <g id="remote" transform="translate(990,92)" data-title="Remote SDK: https://app.parallelmarkets.com/sdk/v2/parallel.js — exposes window.Parallel; Parallel.init(config, on_init); emits auth.statusChange">
+    <rect x="0" y="0" width="360" height="200" rx="12" class="sdk" />
+    <text x="18" y="28" class="node-title">Remote Parallel SDK</text>
+    <text x="18" y="50" class="node-sub">https://app.parallelmarkets.com/sdk/v2/parallel.js</text>
+    <text x="18" y="70" class="node-sub">exposes window.Parallel</text>
+    <text x="18" y="92" class="node-sub">Parallel.init({ ...config, on_init })</text>
+    <text x="18" y="112" class="node-sub">emits auth.statusChange; login/logout/getProfile</text>
+  </g>
+
+  <!-- Build & Tooling -->
+  <g id="tools" transform="translate(490,300)" data-title="Build &amp; Tooling: Rollup, TypeScript, Jest, ESLint/Prettier — produces ESM/CJS bundles and types">
+    <rect x="0" y="0" width="420" height="110" rx="12" class="tools" />
+    <text x="18" y="26" class="node-title">Build &amp; Tooling</text>
+    <text x="18" y="46" class="node-sub">Rollup · TypeScript · Jest · ESLint/Prettier</text>
+  </g>
+
+  <!-- Connectors (curved) -->
+  <path d="M460 160 C520 160 520 160 490 160" class="connector" opacity="0.95" />
+  <!-- vanilla -> browser (imports) -->
+  <path d="M420 156 C480 156 520 172 490 172" class="connector" marker-end="url(#arrow)" />
+  <!-- react -> browser -->
+  <path d="M420 236 C540 236 620 200 510 190" class="connector" marker-end="url(#arrow)" opacity="0.9" />
+  <!-- browser -> remote (script) -->
+  <path d="M910 152 C930 150 960 140 990 140" class="connector" marker-end="url(#arrow)" />
+  <!-- remote -> browser (initialized) -->
+  <path d="M1148 180 C1060 230 980 220 910 220" class="connector" marker-end="url(#arrow)" opacity="0.9" />
+  <!-- tooling -> monorepo -->
+  <path d="M650 360 C550 360 380 340 300 340" class="connector" marker-end="url(#arrow)" stroke-dasharray="6 6" opacity="0.8" />
+
+  <!-- Failure modes box -->
+  <g transform="translate(36,430)">
+    <rect x="0" y="0" width="1314" height="160" rx="12" fill="#fff7f8" stroke="#ffdce6" />
+    <text x="18" y="28" class="node-title">Failure modes &amp; notes</text>
+    <text x="18" y="56" class="node-sub">• Remote SDK script load failure → loadParallel rejects (network or CSP)</text>
+    <text x="18" y="76" class="node-sub">• Server-side rendering (no window) → loadParallel resolves to null</text>
+    <text x="18" y="96" class="node-sub">• Multiple calls to loadParallel → explicit rejection (single-load guard)</text>
+    <text x="18" y="116" class="node-sub">• React embed flow not allowed → react package warns if flow_type==='embed'</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(36,606)">
+    <text x="0" y="14" class="legend">Legend:</text>
+    <rect x="72" y="-8" width="14" height="12" rx="2" class="package" stroke="#e6f6ff"/>
+    <text x="92" y="4" class="legend">Package / Module</text>
+    <rect x="260" y="-8" width="14" height="12" rx="2" class="sdk" stroke="#ffeef3"/>
+    <text x="280" y="4" class="legend">Remote SDK</text>
+    <rect x="420" y="-8" width="14" height="12" rx="2" class="tools" stroke="#fff2d9"/>
+    <text x="440" y="4" class="legend">Build &amp; Tooling</text>
+  </g>
+
+  <text x="36" y="740" class="muted">Edit sources: docs/architecture.dot • docs/architecture.mmd</text>
+  <!-- data-title attributes used for tooltips -->
+</svg>
