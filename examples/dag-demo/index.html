@@ -632,11 +632,14 @@
                     environment: 'demo',
                     flow_type: currentFlowType,
                     redirect_uri: window.location.origin + window.location.pathname,
+                    embed_into_id: currentFlowType === 'embed' ? 'parallel-button-container' : undefined,
                     scopes: ['profile', 'accreditation_status', 'identity']
                 });
 
-                // Show the login button
-                window.Parallel.showButton();
+                // Show the login button (only for overlay and redirect)
+                if (currentFlowType !== 'embed') {
+                    window.Parallel.showButton();
+                }
 
                 // Subscribe to login events
                 window.Parallel.subscribe('auth.login', function(response) {
@@ -683,6 +686,10 @@
             // Reinitialize SDK with new flow type
             if (window.Parallel) {
                 try {
+                    // Clear the container first
+                    const container = document.getElementById('parallel-button-container');
+                    container.innerHTML = '<div class="parallel-login-button"></div>';
+
                     window.Parallel.init({
                         client_id: 'iEGTAGAgN4dGVjHgc2c86',
                         environment: 'demo',
@@ -692,7 +699,11 @@
                         scopes: ['profile', 'accreditation_status', 'identity']
                     });
 
-                    window.Parallel.showButton();
+                    // Only show button for overlay and redirect flows
+                    // For embed, the SDK handles the entire container
+                    if (flowType !== 'embed') {
+                        window.Parallel.showButton();
+                    }
                 } catch (error) {
                     console.error('Failed to switch flow type:', error);
                     handleSDKError(error);
