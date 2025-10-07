@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Ascension Group | Digital Asset Family Office</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dag-navy: #212529;
+            --dag-gold: #c69c6d;
+            --dag-cream: #f8f9fa;
+            --dag-gray: #777777;
+            --dag-bg: #f6f6f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+            color: var(--dag-navy);
+            line-height: 1.6;
+            background-color: var(--dag-bg);
+        }
+
+        /* Header */
+        header {
+            background: var(--dag-navy);
+            color: white;
+            padding: 1.5rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dag-gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--dag-gold);
+        }
+
+        .cta-button {
+            background: var(--dag-gold);
+            color: var(--dag-navy);
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            background: #d4b56e;
+            transform: translateY(-2px);
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--dag-navy) 0%, #2c3136 100%);
+            color: white;
+            padding: 12rem 2rem 8rem;
+            text-align: center;
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: rgba(255,255,255,0.9);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-weight: 400;
+        }
+
+        /* Verification Section */
+        .verification-section {
+            background: var(--dag-cream);
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--dag-navy);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--dag-gray);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+        }
+
+        .verification-card {
+            background: white;
+            border-radius: 10px;
+            padding: 4rem 3rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            max-width: 700px;
+            margin: 0 auto;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .verification-card:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            transform: translateY(-3px);
+        }
+
+        .verification-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dag-navy);
+        }
+
+        .verification-card p {
+            color: var(--dag-gray);
+            margin-bottom: 2rem;
+        }
+
+        /* Parallel Markets Button Container */
+        #parallel-button-container {
+            min-height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem 0;
+        }
+
+        .parallel-login-button {
+            /* Parallel Markets SDK will inject button here */
+        }
+
+        .flow-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .flow-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--dag-gold);
+            background: white;
+            color: var(--dag-navy);
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            font-size: 0.95rem;
+        }
+
+        .flow-btn.active {
+            background: var(--dag-gold);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(198, 156, 109, 0.3);
+        }
+
+        .flow-btn:hover {
+            background: var(--dag-gold);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(198, 156, 109, 0.3);
+        }
+
+        /* Features */
+        .features {
+            padding: 6rem 2rem;
+            background: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 3rem auto 0;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .feature:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: var(--dag-navy);
+            font-weight: 700;
+        }
+
+        .feature p {
+            color: var(--dag-gray);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dag-navy);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        footer p {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .powered-by {
+            color: var(--dag-gold);
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">Digital Ascension Group</div>
+            <div class="nav-links">
+                <a href="#sdk-demo">SDK Demo</a>
+                <a href="#integration">Integration</a>
+                <a class="cta-button" href="#sdk-demo">Try Demo</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Pioneering Digital Asset<br>Wealth Management</h1>
+        <p>Institutional-grade infrastructure for cryptocurrency investors, family offices, and digital asset funds.</p>
+    </section>
+
+    <!-- SDK Integration Demo Section -->
+    <section id="sdk-demo" class="verification-section">
+        <div class="container">
+            <h2 class="section-title">Parallel Markets SDK Demo</h2>
+            <p class="section-subtitle">Experience seamless investor verification with multiple integration options</p>
+
+            <div class="verification-card">
+                <h3>Choose Your Integration Flow</h3>
+                <p>Select how you want the Parallel Markets verification experience to appear</p>
+
+                <!-- Flow Type Selector -->
+                <div class="flow-selector">
+                    <button class="flow-btn active" onclick="setFlowType('overlay')">Overlay</button>
+                    <button class="flow-btn" onclick="setFlowType('redirect')">Redirect</button>
+                    <button class="flow-btn" onclick="setFlowType('embed')">Embed</button>
+                </div>
+
+                <!-- Parallel Markets SDK Button -->
+                <div id="parallel-button-container">
+                    <div class="parallel-login-button"></div>
+                </div>
+
+                <div style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; padding: 1.5rem; margin: 2rem 0; font-size: 0.9rem; color: #856404;">
+                    <strong>⚠️ Setup Required:</strong> To see the Parallel Markets button and overlay, replace <code>YOUR_CLIENT_ID_HERE</code> in the code with your actual Parallel Markets client ID. Contact Parallel Markets to get your credentials.
+                </div>
+
+                <div style="background: #e8f4f8; border: 1px solid #4a90e2; border-radius: 6px; padding: 1.5rem; margin: 1rem 0; font-size: 0.9rem; color: #1a5490;">
+                    <strong>💡 How It Works:</strong>
+                    <ul style="margin: 0.5rem 0 0 1.5rem; padding: 0;">
+                        <li><strong>Overlay:</strong> Modal popup over your site (recommended)</li>
+                        <li><strong>Redirect:</strong> Full page redirect to Parallel Markets</li>
+                        <li><strong>Embed:</strong> Inline iframe integration</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem; margin-bottom: 0;">All verification flows (KYC, accreditation, business checks) are handled automatically by the SDK.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integration Features -->
+    <section id="integration" class="features">
+        <div class="container">
+            <h2 class="section-title">SDK Integration Options</h2>
+
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">🔲</div>
+                    <h3>Overlay Mode</h3>
+                    <p>Modal overlay that appears on top of your site—best for seamless user experience</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">↗️</div>
+                    <h3>Redirect Mode</h3>
+                    <p>Full page redirect to Parallel Markets—ideal for mobile experiences</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📱</div>
+                    <h3>Embed Mode</h3>
+                    <p>Inline iframe integration—perfect for custom page layouts</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Automated Flows</h3>
+                    <p>SDK handles KYC, accreditation, and business verification automatically</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Digital Ascension Group. All rights reserved.</p>
+        <p class="powered-by">Identity Verification Powered by Parallel Markets | An iCapital Company</p>
+    </footer>
+
+    <!-- Parallel Markets SDK -->
+    <script>
+        // Load Parallel Markets SDK
+        (function() {
+            const script = document.createElement('script');
+            script.src = 'https://app.parallelmarkets.com/sdk/v2/parallel.js';
+            script.onload = initializeSDK;
+            document.head.appendChild(script);
+        })();
+
+        let currentFlowType = 'overlay';
+
+        function initializeSDK() {
+            if (!window.Parallel) {
+                console.error('Parallel Markets SDK failed to load');
+                return;
+            }
+
+            // Initialize SDK
+            window.Parallel.init({
+                client_id: 'YOUR_CLIENT_ID_HERE',  // Replace with actual client ID
+                environment: 'demo',  // or 'production'
+                flow_type: currentFlowType,
+                scopes: ['profile', 'accreditation_status', 'identity']
+            });
+
+            // Show the login button
+            window.Parallel.showButton();
+
+            // Subscribe to login events
+            window.Parallel.subscribe('auth.login', function(response) {
+                console.log('User logged in:', response);
+
+                // Get user profile after login
+                window.Parallel.getProfile(
+                    function(profile) {
+                        console.log('User profile:', profile);
+                        alert('Welcome! Your Parallel ID: ' + profile.id);
+
+                        // Here you would save the profile.id to your backend
+                        // saveUserProfile(profile);
+                    },
+                    function(error) {
+                        console.error('Error getting profile:', error);
+                    }
+                );
+            });
+
+            // Subscribe to logout events
+            window.Parallel.subscribe('auth.logout', function() {
+                console.log('User logged out');
+            });
+
+            console.log('Parallel Markets SDK initialized successfully');
+        }
+
+        function setFlowType(flowType) {
+            currentFlowType = flowType;
+
+            // Update button states
+            document.querySelectorAll('.flow-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Reinitialize SDK with new flow type
+            if (window.Parallel) {
+                window.Parallel.init({
+                    client_id: 'YOUR_CLIENT_ID_HERE',
+                    environment: 'demo',
+                    flow_type: flowType,
+                    embed_into_id: flowType === 'embed' ? 'parallel-button-container' : undefined,
+                    scopes: ['profile', 'accreditation_status', 'identity']
+                });
+
+                window.Parallel.showButton();
+            }
+
+            console.log('Flow type changed to:', flowType);
+        }
+
+        // Optional: Save user profile to your backend
+        function saveUserProfile(profile) {
+            fetch('/api/save-profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    parallelId: profile.id,
+                    profile: profile
+                })
+            })
+            .then(response => response.json())
+            .then(data => console.log('Profile saved:', data))
+            .catch(error => console.error('Error saving profile:', error));
+        }
+    </script>
+</body>
+</html>

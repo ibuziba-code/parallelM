@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Ascension Group | Parallel Markets SDK Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Arial', sans-serif;
+            color: #333;
+            line-height: 1.6;
+            background: #f5f5f5;
+        }
+
+        /* Header */
+        .header {
+            background: #fff;
+            padding: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .top-bar {
+            background: #fff;
+            border-bottom: 1px solid #e5e5e5;
+            padding: 0.5rem 2rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .top-bar-link {
+            color: #333;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .top-bar-link:hover {
+            color: #000;
+        }
+
+        .top-bar-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+            border-left: 1px solid #e5e5e5;
+            padding-left: 1.5rem;
+            margin-left: 1rem;
+        }
+
+        .social-icon {
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: #333;
+            transition: fill 0.3s;
+        }
+
+        .social-icon:hover svg {
+            fill: #000;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav a:hover {
+            color: #000;
+        }
+
+        .nav a:not(.contact-btn):hover::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #c69c6d;
+        }
+
+        .contact-btn {
+            background: #2b3139;
+            color: white !important;
+            padding: 0.65rem 1.8rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-btn:hover {
+            background: #1a1e24;
+            transform: translateY(-1px);
+        }
+
+        .contact-btn:hover::after {
+            display: none;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero-card {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .hero-content-wrapper {
+            width: 100%;
+        }
+
+        .hero-main-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .hero-images {
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 200px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+        }
+
+        .hero-image:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+        }
+
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* SDK Demo Section */
+        .sdk-section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sdk-card {
+            background: white;
+            border-radius: 15px;
+            padding: 4rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #000;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .flow-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .flow-btn {
+            padding: 0.9rem 2rem;
+            border: 2px solid #c69c6d;
+            background: white;
+            color: #2b3139;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .flow-btn.active,
+        .flow-btn:hover {
+            background: #c69c6d;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(198, 156, 109, 0.3);
+        }
+
+        #parallel-button-container {
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 3rem 0;
+            padding: 3rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            border: 2px dashed #c69c6d;
+            position: relative;
+        }
+
+        #parallel-button-container::before {
+            content: "Parallel Markets Button Loads Here";
+            position: absolute;
+            color: #999;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        #parallel-button-container:has(.parallel-login-button:not(:empty))::before {
+            display: none;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+            border-left: 4px solid #ffc107;
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            font-size: 0.95rem;
+            color: #856404;
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.1);
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .info-box code {
+            background: rgba(255, 193, 7, 0.15);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .features-box {
+            background: linear-gradient(135deg, #e8f4ff 0%, #d6ebff 100%);
+            border-left: 4px solid #4a90e2;
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+            color: #1a5490;
+            box-shadow: 0 2px 8px rgba(74, 144, 226, 0.1);
+        }
+
+        .features-box strong {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .features-box ul {
+            margin: 1rem 0 0 1.5rem;
+        }
+
+        .features-box li {
+            margin: 0.75rem 0;
+            line-height: 1.6;
+        }
+
+        .features-box li strong {
+            display: inline;
+            margin: 0;
+        }
+
+        /* Features Grid */
+        .features-section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border: 1px solid #f0f0f0;
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            transform: translateY(-8px);
+            border-color: #c69c6d;
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.25rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .feature-card h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 1rem;
+            letter-spacing: -0.3px;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #2b3139 0%, #1a1e24 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 6rem;
+            border-top: 4px solid #c69c6d;
+        }
+
+        .footer p {
+            color: rgba(255,255,255,0.85);
+            margin: 0.75rem 0;
+            font-size: 0.95rem;
+        }
+
+        .footer .powered-by {
+            color: #c69c6d;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero-card {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-images {
+                grid-template-columns: 1fr;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .flow-selector {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <a href="#schedule" class="top-bar-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                Schedule a Call
+            </a>
+            <div class="social-icons">
+                <a href="https://facebook.com" class="social-icon" aria-label="Facebook" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                </a>
+                <a href="https://twitter.com" class="social-icon" aria-label="Twitter/X" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+                <a href="https://linkedin.com" class="social-icon" aria-label="LinkedIn" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                </a>
+                <a href="#search" class="social-icon" aria-label="Search">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Navigation -->
+        <div class="header-container">
+            <div class="logo">
+                <img src="image.png" alt="Digital Ascension Group Logo">
+            </div>
+
+            <nav class="nav">
+                <a href="#home">Home</a>
+                <a href="#services">Services</a>
+                <a href="#about">About Us</a>
+                <a href="#blog">Blog</a>
+                <a href="#sdk-demo">Get a Consultation</a>
+                <a href="#contact">Contact Us</a>
+                <a class="contact-btn" href="#sdk-demo">
+                    <span>✉️</span> Contact Us
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-card">
+            <div class="hero-content-wrapper">
+                <img src="image copy.png" alt="Digital Ascension Group - Innovative Family Office Solutions" class="hero-main-image">
+            </div>
+
+            <div class="hero-images">
+                <div class="hero-image">
+                    <img src="image copy 2.png" alt="Business meeting">
+                </div>
+                <div class="hero-image">
+                    <img src="image copy 3.png" alt="Office building">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SDK Demo Section -->
+    <section id="sdk-demo" class="sdk-section">
+        <div class="sdk-card">
+            <h2 class="section-title">Parallel Markets SDK Demo</h2>
+            <p class="section-subtitle">Experience seamless investor verification with multiple integration options</p>
+
+            <div class="demo-container">
+                <h3 style="text-align: center; margin-bottom: 1rem; font-size: 1.6rem; color: #000; font-weight: 700;">
+                    Choose Your Integration Flow
+                </h3>
+                <p style="text-align: center; margin-bottom: 2.5rem; color: #666; font-size: 1rem;">
+                    Select how you want the Parallel Markets verification experience to appear
+                </p>
+
+                <!-- Flow Type Selector -->
+                <div class="flow-selector">
+                    <button class="flow-btn active" onclick="setFlowType('overlay')">Overlay</button>
+                    <button class="flow-btn" onclick="setFlowType('redirect')">Redirect</button>
+                    <button class="flow-btn" onclick="setFlowType('embed')">Embed</button>
+                </div>
+
+                <!-- Parallel Markets SDK Button -->
+                <div id="parallel-button-container">
+                    <div class="parallel-login-button"></div>
+                </div>
+
+                <div class="info-box">
+                    <strong>⚠️ Setup Required:</strong>
+                    To see the Parallel Markets button and overlay, replace <code>YOUR_CLIENT_ID_HERE</code> in the code with your actual Parallel Markets client ID. Contact Parallel Markets to get your credentials.
+                </div>
+
+                <div class="features-box">
+                    <strong>💡 How It Works:</strong>
+                    <ul>
+                        <li><strong>Overlay:</strong> Modal popup over your site (recommended)</li>
+                        <li><strong>Redirect:</strong> Full page redirect to Parallel Markets</li>
+                        <li><strong>Embed:</strong> Inline iframe integration</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem; margin-bottom: 0;">
+                        All verification flows (KYC, accreditation, business checks) are handled automatically by the SDK.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integration Features -->
+    <section id="integration" class="features-section">
+        <h2 class="section-title">SDK Integration Options</h2>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔲</div>
+                <h3>Overlay Mode</h3>
+                <p>Modal overlay that appears on top of your site—best for seamless user experience</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">↗️</div>
+                <h3>Redirect Mode</h3>
+                <p>Full page redirect to Parallel Markets—ideal for mobile experiences</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Embed Mode</h3>
+                <p>Inline iframe integration—perfect for custom page layouts</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Automated Flows</h3>
+                <p>SDK handles KYC, accreditation, and business verification automatically</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Digital Ascension Group. All rights reserved.</p>
+        <p class="powered-by">Identity Verification Powered by Parallel Markets | An iCapital Company</p>
+    </footer>
+
+    <!-- Parallel Markets SDK -->
+    <script>
+        // Load Parallel Markets SDK
+        (function() {
+            const script = document.createElement('script');
+            script.src = 'https://app.parallelmarkets.com/sdk/v2/parallel.js';
+            script.onload = initializeSDK;
+            document.head.appendChild(script);
+        })();
+
+        let currentFlowType = 'overlay';
+
+        function initializeSDK() {
+            if (!window.Parallel) {
+                console.error('Parallel Markets SDK failed to load');
+                return;
+            }
+
+            // Initialize SDK
+            window.Parallel.init({
+                client_id: 'YOUR_CLIENT_ID_HERE',
+                environment: 'demo',
+                flow_type: currentFlowType,
+                scopes: ['profile', 'accreditation_status', 'identity']
+            });
+
+            // Show the login button
+            window.Parallel.showButton();
+
+            // Subscribe to login events
+            window.Parallel.subscribe('auth.login', function(response) {
+                console.log('User logged in:', response);
+
+                window.Parallel.getProfile(
+                    function(profile) {
+                        console.log('User profile:', profile);
+                        alert('Welcome! Your Parallel ID: ' + profile.id);
+                    },
+                    function(error) {
+                        console.error('Error getting profile:', error);
+                    }
+                );
+            });
+
+            window.Parallel.subscribe('auth.logout', function() {
+                console.log('User logged out');
+            });
+
+            console.log('Parallel Markets SDK initialized successfully');
+        }
+
+        function setFlowType(flowType) {
+            currentFlowType = flowType;
+
+            // Update button states
+            document.querySelectorAll('.flow-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Reinitialize SDK with new flow type
+            if (window.Parallel) {
+                window.Parallel.init({
+                    client_id: 'YOUR_CLIENT_ID_HERE',
+                    environment: 'demo',
+                    flow_type: flowType,
+                    embed_into_id: flowType === 'embed' ? 'parallel-button-container' : undefined,
+                    scopes: ['profile', 'accreditation_status', 'identity']
+                });
+
+                window.Parallel.showButton();
+            }
+
+            console.log('Flow type changed to:', flowType);
+        }
+    </script>
+</body>
+</html>

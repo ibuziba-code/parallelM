@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Ascension Group | Parallel Markets SDK Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Arial', sans-serif;
+            color: #333;
+            line-height: 1.6;
+            background: #f5f5f5;
+        }
+
+        /* Header */
+        .header {
+            background: #fff;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo svg {
+            width: 35px;
+            height: 35px;
+            fill: #fff;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav a {
+            color: #333;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #c69c6d;
+        }
+
+        .contact-btn {
+            background: #2b3139;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .contact-btn:hover {
+            background: #1a1e24;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero-card {
+            background: white;
+            border-radius: 15px;
+            padding: 4rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .hero-content .divider {
+            width: 100%;
+            height: 3px;
+            background: #2b3139;
+            margin: 2rem 0;
+        }
+
+        .hero-content .tagline {
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .hero-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .hero-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* SDK Demo Section */
+        .sdk-section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .sdk-card {
+            background: white;
+            border-radius: 15px;
+            padding: 4rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #000;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .flow-selector {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .flow-btn {
+            padding: 0.9rem 2rem;
+            border: 2px solid #c69c6d;
+            background: white;
+            color: #2b3139;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .flow-btn.active,
+        .flow-btn:hover {
+            background: #c69c6d;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(198, 156, 109, 0.3);
+        }
+
+        #parallel-button-container {
+            min-height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border: 2px dashed #ddd;
+        }
+
+        .info-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-size: 0.95rem;
+            color: #856404;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .features-box {
+            background: #e8f4f8;
+            border: 1px solid #4a90e2;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+            color: #1a5490;
+        }
+
+        .features-box ul {
+            margin: 0.5rem 0 0 1.5rem;
+        }
+
+        .features-box li {
+            margin: 0.5rem 0;
+        }
+
+        /* Features Grid */
+        .features-section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2b3139;
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            color: rgba(255,255,255,0.8);
+            margin: 0.5rem 0;
+        }
+
+        .footer .powered-by {
+            color: #c69c6d;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero-card {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-images {
+                grid-template-columns: 1fr;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .flow-selector {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">
+                <!-- DAG Logo Icon -->
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="50,10 90,30 90,70 50,90 10,70 10,30" stroke="white" stroke-width="3" fill="none"/>
+                    <text x="50" y="60" text-anchor="middle" fill="white" font-size="30" font-weight="bold">D</text>
+                </svg>
+            </div>
+
+            <nav class="nav">
+                <a href="#home">Home</a>
+                <a href="#sdk-demo">SDK Demo</a>
+                <a href="#integration">Integration</a>
+                <a class="contact-btn" href="#sdk-demo">Try Demo</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-card">
+            <div class="hero-content">
+                <h1>DIGITAL ASCENSION GROUP</h1>
+
+                <p class="subtitle">Innovative Family Office Solutions</p>
+
+                <p style="color: #666; font-size: 1rem;">
+                    Specialized family office services for crypto-focused HNW individuals and families.
+                </p>
+
+                <div class="divider"></div>
+
+                <p class="tagline">Drive growth, master risk, forge an enduring legacy</p>
+
+                <a href="#sdk-demo" class="contact-btn">View SDK Demo</a>
+            </div>
+
+            <div class="hero-images">
+                <div class="hero-image">
+                    <!-- Placeholder for business meeting image -->
+                    <div style="width:100%;height:100%;background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                </div>
+                <div class="hero-image">
+                    <!-- Placeholder for office building image -->
+                    <div style="width:100%;height:100%;background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SDK Demo Section -->
+    <section id="sdk-demo" class="sdk-section">
+        <div class="sdk-card">
+            <h2 class="section-title">Parallel Markets SDK Demo</h2>
+            <p class="section-subtitle">Experience seamless investor verification with multiple integration options</p>
+
+            <div class="demo-container">
+                <h3 style="text-align: center; margin-bottom: 1.5rem; font-size: 1.5rem; color: #000;">
+                    Choose Your Integration Flow
+                </h3>
+
+                <!-- Flow Type Selector -->
+                <div class="flow-selector">
+                    <button class="flow-btn active" onclick="setFlowType('overlay')">Overlay</button>
+                    <button class="flow-btn" onclick="setFlowType('redirect')">Redirect</button>
+                    <button class="flow-btn" onclick="setFlowType('embed')">Embed</button>
+                </div>
+
+                <!-- Parallel Markets SDK Button -->
+                <div id="parallel-button-container">
+                    <div class="parallel-login-button"></div>
+                </div>
+
+                <div class="info-box">
+                    <strong>⚠️ Setup Required:</strong>
+                    To see the Parallel Markets button and overlay, replace <code>YOUR_CLIENT_ID_HERE</code> in the code with your actual Parallel Markets client ID. Contact Parallel Markets to get your credentials.
+                </div>
+
+                <div class="features-box">
+                    <strong>💡 How It Works:</strong>
+                    <ul>
+                        <li><strong>Overlay:</strong> Modal popup over your site (recommended)</li>
+                        <li><strong>Redirect:</strong> Full page redirect to Parallel Markets</li>
+                        <li><strong>Embed:</strong> Inline iframe integration</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem; margin-bottom: 0;">
+                        All verification flows (KYC, accreditation, business checks) are handled automatically by the SDK.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integration Features -->
+    <section id="integration" class="features-section">
+        <h2 class="section-title">SDK Integration Options</h2>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔲</div>
+                <h3>Overlay Mode</h3>
+                <p>Modal overlay that appears on top of your site—best for seamless user experience</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">↗️</div>
+                <h3>Redirect Mode</h3>
+                <p>Full page redirect to Parallel Markets—ideal for mobile experiences</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>Embed Mode</h3>
+                <p>Inline iframe integration—perfect for custom page layouts</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Automated Flows</h3>
+                <p>SDK handles KYC, accreditation, and business verification automatically</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Digital Ascension Group. All rights reserved.</p>
+        <p class="powered-by">Identity Verification Powered by Parallel Markets | An iCapital Company</p>
+    </footer>
+
+    <!-- Parallel Markets SDK -->
+    <script>
+        // Load Parallel Markets SDK
+        (function() {
+            const script = document.createElement('script');
+            script.src = 'https://app.parallelmarkets.com/sdk/v2/parallel.js';
+            script.onload = initializeSDK;
+            document.head.appendChild(script);
+        })();
+
+        let currentFlowType = 'overlay';
+
+        function initializeSDK() {
+            if (!window.Parallel) {
+                console.error('Parallel Markets SDK failed to load');
+                return;
+            }
+
+            // Initialize SDK
+            window.Parallel.init({
+                client_id: 'YOUR_CLIENT_ID_HERE',
+                environment: 'demo',
+                flow_type: currentFlowType,
+                scopes: ['profile', 'accreditation_status', 'identity']
+            });
+
+            // Show the login button
+            window.Parallel.showButton();
+
+            // Subscribe to login events
+            window.Parallel.subscribe('auth.login', function(response) {
+                console.log('User logged in:', response);
+
+                window.Parallel.getProfile(
+                    function(profile) {
+                        console.log('User profile:', profile);
+                        alert('Welcome! Your Parallel ID: ' + profile.id);
+                    },
+                    function(error) {
+                        console.error('Error getting profile:', error);
+                    }
+                );
+            });
+
+            window.Parallel.subscribe('auth.logout', function() {
+                console.log('User logged out');
+            });
+
+            console.log('Parallel Markets SDK initialized successfully');
+        }
+
+        function setFlowType(flowType) {
+            currentFlowType = flowType;
+
+            // Update button states
+            document.querySelectorAll('.flow-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Reinitialize SDK with new flow type
+            if (window.Parallel) {
+                window.Parallel.init({
+                    client_id: 'YOUR_CLIENT_ID_HERE',
+                    environment: 'demo',
+                    flow_type: flowType,
+                    embed_into_id: flowType === 'embed' ? 'parallel-button-container' : undefined,
+                    scopes: ['profile', 'accreditation_status', 'identity']
+                });
+
+                window.Parallel.showButton();
+            }
+
+            console.log('Flow type changed to:', flowType);
+        }
+    </script>
+</body>
+</html>
