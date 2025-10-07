@@ -280,9 +280,6 @@
 
         #parallel-button-container {
             min-height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             margin: 3rem 0;
             padding: 3rem;
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -291,15 +288,36 @@
             position: relative;
         }
 
+        /* For button display (overlay/redirect) */
+        #parallel-button-container.button-mode {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* For embed display */
+        #parallel-button-container.embed-mode {
+            display: block;
+            min-height: 600px;
+            padding: 0;
+            background: transparent;
+            border: none;
+        }
+
         #parallel-button-container::before {
             content: "Parallel Markets Button Loads Here";
             position: absolute;
             color: #999;
             font-size: 0.9rem;
             font-weight: 500;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
         }
 
-        #parallel-button-container:has(.parallel-login-button:not(:empty))::before {
+        #parallel-button-container.embed-mode::before,
+        #parallel-button-container:has(.parallel-login-button:not(:empty))::before,
+        #parallel-button-container:has(iframe)::before {
             display: none;
         }
 
@@ -627,6 +645,17 @@
 
             // Initialize SDK with error handling
             try {
+                const container = document.getElementById('parallel-button-container');
+
+                // Set container mode
+                if (currentFlowType === 'embed') {
+                    container.classList.add('embed-mode');
+                    container.classList.remove('button-mode');
+                } else {
+                    container.classList.add('button-mode');
+                    container.classList.remove('embed-mode');
+                }
+
                 window.Parallel.init({
                     client_id: 'iEGTAGAgN4dGVjHgc2c86',
                     environment: 'demo',
@@ -661,12 +690,6 @@
                     console.log('User logged out');
                 });
 
-                // Subscribe to error events
-                window.Parallel.subscribe('error', function(error) {
-                    console.error('Parallel Markets SDK Error:', error);
-                    handleSDKError(error);
-                });
-
                 console.log('Parallel Markets SDK initialized successfully');
             } catch (error) {
                 console.error('Failed to initialize Parallel Markets SDK:', error);
@@ -689,6 +712,15 @@
                     // Clear the container first
                     const container = document.getElementById('parallel-button-container');
                     container.innerHTML = '<div class="parallel-login-button"></div>';
+
+                    // Set container mode
+                    if (flowType === 'embed') {
+                        container.classList.add('embed-mode');
+                        container.classList.remove('button-mode');
+                    } else {
+                        container.classList.add('button-mode');
+                        container.classList.remove('embed-mode');
+                    }
 
                     window.Parallel.init({
                         client_id: 'iEGTAGAgN4dGVjHgc2c86',
