@@ -555,13 +555,9 @@
                     <div class="parallel-login-button"></div>
                 </div>
 
-                <div class="info-box">
-                    <strong>⚠️ Client ID Configuration:</strong>
-                    The demo client IDs are configured for specific domains. To test this demo:
-                    <ul style="margin: 0.5rem 0 0 1.5rem;">
-                        <li>Contact <a href="https://www.parallelmarkets.com/contact" target="_blank" style="color: #856404; font-weight: 600;">Parallel Markets</a> to get client credentials for your domain</li>
-                        <li>Or deploy to <strong>GitHub Pages</strong> and configure credentials for that domain</li>
-                    </ul>
+                <div class="info-box" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-left-color: #28a745; color: #155724;">
+                    <strong>✅ Demo Ready!</strong>
+                    This demo uses a working Parallel Markets demo client ID (<code style="background: rgba(40, 167, 69, 0.15);">VpbHft3b8bbKTv2LyaUVS</code>). Click the button above to try the verification flow!
                 </div>
 
                 <div class="features-box">
@@ -643,7 +639,7 @@
 
             // Initialize SDK
             window.Parallel.init({
-                client_id: 'demo_client_id_overlay',
+                client_id: 'VpbHft3b8bbKTv2LyaUVS',
                 environment: 'demo',
                 flow_type: currentFlowType,
                 scopes: ['profile', 'accreditation_status', 'identity']
@@ -683,17 +679,10 @@
             });
             event.target.classList.add('active');
 
-            // Map flow types to appropriate demo client IDs
-            const clientIdMap = {
-                'overlay': 'demo_client_id_overlay',
-                'redirect': 'demo_client_id_redirect',
-                'embed': 'demo_client_id_embed'
-            };
-
             // Reinitialize SDK with new flow type
             if (window.Parallel) {
                 window.Parallel.init({
-                    client_id: clientIdMap[flowType] || 'demo_client_id_overlay',
+                    client_id: 'VpbHft3b8bbKTv2LyaUVS',
                     environment: 'demo',
                     flow_type: flowType,
                     embed_into_id: flowType === 'embed' ? 'parallel-button-container' : undefined,
