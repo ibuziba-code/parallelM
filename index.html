@@ -625,37 +625,50 @@
                 return;
             }
 
-            // Initialize SDK
-            window.Parallel.init({
-                client_id: 'VpbHft3b8bbKTv2LyaUVS',
-                environment: 'demo',
-                flow_type: currentFlowType,
-                scopes: ['profile', 'accreditation_status', 'identity']
-            });
+            // Initialize SDK with error handling
+            try {
+                window.Parallel.init({
+                    client_id: 'VpbHft3b8bbKTv2LyaUVS',
+                    environment: 'demo',
+                    flow_type: currentFlowType,
+                    redirect_uri: window.location.origin + window.location.pathname,
+                    scopes: ['profile', 'accreditation_status', 'identity']
+                });
 
-            // Show the login button
-            window.Parallel.showButton();
+                // Show the login button
+                window.Parallel.showButton();
 
-            // Subscribe to login events
-            window.Parallel.subscribe('auth.login', function(response) {
-                console.log('User logged in:', response);
+                // Subscribe to login events
+                window.Parallel.subscribe('auth.login', function(response) {
+                    console.log('User logged in:', response);
 
-                window.Parallel.getProfile(
-                    function(profile) {
-                        console.log('User profile:', profile);
-                        alert('Welcome! Your Parallel ID: ' + profile.id);
-                    },
-                    function(error) {
-                        console.error('Error getting profile:', error);
-                    }
-                );
-            });
+                    window.Parallel.getProfile(
+                        function(profile) {
+                            console.log('User profile:', profile);
+                            showSuccessMessage('Welcome! Verification complete.');
+                        },
+                        function(error) {
+                            console.error('Error getting profile:', error);
+                            showErrorMessage('Could not retrieve profile. Please try again.');
+                        }
+                    );
+                });
 
-            window.Parallel.subscribe('auth.logout', function() {
-                console.log('User logged out');
-            });
+                window.Parallel.subscribe('auth.logout', function() {
+                    console.log('User logged out');
+                });
 
-            console.log('Parallel Markets SDK initialized successfully');
+                // Subscribe to error events
+                window.Parallel.subscribe('error', function(error) {
+                    console.error('Parallel Markets SDK Error:', error);
+                    handleSDKError(error);
+                });
+
+                console.log('Parallel Markets SDK initialized successfully');
+            } catch (error) {
+                console.error('Failed to initialize Parallel Markets SDK:', error);
+                showErrorMessage('SDK initialization failed. Please contact support.');
+            }
         }
 
         function setFlowType(flowType) {
@@ -669,18 +682,84 @@
 
             // Reinitialize SDK with new flow type
             if (window.Parallel) {
-                window.Parallel.init({
-                    client_id: 'VpbHft3b8bbKTv2LyaUVS',
-                    environment: 'demo',
-                    flow_type: flowType,
-                    embed_into_id: flowType === 'embed' ? 'parallel-button-container' : undefined,
-                    scopes: ['profile', 'accreditation_status', 'identity']
-                });
+                try {
+                    window.Parallel.init({
+                        client_id: 'VpbHft3b8bbKTv2LyaUVS',
+                        environment: 'demo',
+                        flow_type: flowType,
+                        redirect_uri: window.location.origin + window.location.pathname,
+                        embed_into_id: flowType === 'embed' ? 'parallel-button-container' : undefined,
+                        scopes: ['profile', 'accreditation_status', 'identity']
+                    });
 
-                window.Parallel.showButton();
+                    window.Parallel.showButton();
+                } catch (error) {
+                    console.error('Failed to switch flow type:', error);
+                    handleSDKError(error);
+                }
             }
 
             console.log('Flow type changed to:', flowType);
+        }
+
+        // Error handling functions
+        function handleSDKError(error) {
+            console.error('SDK Error:', error);
+
+            // Check for specific error types
+            if (error && error.message) {
+                if (error.message.includes('redirect_uri')) {
+                    showErrorMessage('Configuration Error: This demo requires proper redirect URI setup. Please contact Parallel Markets for credentials configured for your domain.');
+                } else if (error.message.includes('client_id')) {
+                    showErrorMessage('Configuration Error: Invalid client credentials. Please contact support.');
+                } else {
+                    showErrorMessage('An error occurred: ' + error.message);
+                }
+            } else {
+                showErrorMessage('An unexpected error occurred. Please try again or contact support.');
+            }
+        }
+
+        function showErrorMessage(message) {
+            const container = document.getElementById('parallel-button-container');
+            container.innerHTML = `
+                <div style="background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+                            border-left: 4px solid #dc3545;
+                            border-radius: 12px;
+                            padding: 1.5rem;
+                            color: #721c24;
+                            text-align: center;">
+                    <strong>⚠️ ${message}</strong>
+                    <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                        For production use, please contact
+                        <a href="https://www.parallelmarkets.com/contact" target="_blank"
+                           style="color: #721c24; font-weight: 600; text-decoration: underline;">
+                            Parallel Markets
+                        </a>
+                        to get credentials configured for your domain.
+                    </p>
+                </div>
+            `;
+        }
+
+        function showSuccessMessage(message) {
+            const container = document.getElementById('parallel-button-container');
+            const successDiv = document.createElement('div');
+            successDiv.style.cssText = `
+                background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+                border-left: 4px solid #28a745;
+                border-radius: 12px;
+                padding: 1rem;
+                color: #155724;
+                text-align: center;
+                margin-top: 1rem;
+            `;
+            successDiv.innerHTML = `<strong>✅ ${message}</strong>`;
+            container.appendChild(successDiv);
+
+            setTimeout(() => {
+                successDiv.remove();
+            }, 5000);
         }
     </script>
 </body>
