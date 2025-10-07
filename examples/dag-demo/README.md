@@ -12,25 +12,37 @@ A clean, simple demonstration of Parallel Markets SDK integration styled for Dig
 
 ## Quick Start
 
-### Option 1: Simple HTTP Server (Python)
+### ⚡ Recommended: Use the Startup Script
 
 ```bash
-cd dag-simple
-python3 -m http.server 8000
+cd examples/dag-demo
+./start-demo.sh
 ```
 
-Then open: http://localhost:8000
+Then open: **http://localhost:8080**
 
-### Option 2: Simple HTTP Server (Node.js)
+### Option 1: Python HTTP Server
 
 ```bash
-cd dag-simple
-npx serve
+cd examples/dag-demo
+python3 -m http.server 8080
 ```
 
-### Option 3: Open Directly
+Then open: http://localhost:8080
 
-Simply open `index.html` in your browser (some SDK features may be limited without a server).
+### Option 2: Node.js Server
+
+```bash
+cd examples/dag-demo
+npx serve -p 8080
+```
+
+### ⚠️ Important Notes
+
+- **Must run on a local server** - Opening the HTML file directly won't work properly
+- The demo client ID works with `localhost` URLs
+- Use port 8080 for best compatibility
+- GitHub Pages (`.github.io` domains) are not supported by the demo client ID
 
 ## Configuration
 
